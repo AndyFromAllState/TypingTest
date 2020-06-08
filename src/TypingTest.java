@@ -4,7 +4,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class TypingTest extends JFrame {
-	private final int FRAME_HEIGHT = 800, FRAME_WIDTH = 800;
+	private final int FRAME_HEIGHT = 800, FRAME_WIDTH = 1350;
 	private JTextArea testWords = new JTextArea(TestWords.createTest());
 	
 	public TypingTest() {
@@ -14,7 +14,10 @@ public class TypingTest extends JFrame {
 		this.setTitle("TypingTest");
 		this.add(panel);
 		
+		testWords.setLineWrap(true);
+		testWords.setSize(FRAME_WIDTH, FRAME_HEIGHT/2);
 		panel.add(testWords);
+		
 		
 		this.setVisible(true);
 	}
