@@ -61,7 +61,6 @@ public class TypingTest extends JFrame {
 			if (e.getKeyChar() == testPanel.getText().charAt(0)) {
 				textInputPanel.setEditable(true);
 				testPanel.setText(testPanel.getText().substring(1));
-				System.out.println("hi");
 			}
 			else if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)
 				textInputPanel.setEditable(false);
