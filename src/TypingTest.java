@@ -34,7 +34,7 @@ public class TypingTest extends JFrame {
 		StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
 		doc.setParagraphAttributes(0, doc.getLength(), center, false);
 		 
-		//puts the testPanel into a scrollable pane
+		//puts the testPanel into a scrollable pane |NOTE - NOT USED DUE TO AUTO SCROLL ERROR -> https://www.java-forums.org/awt-swing/12498-getting-jscrollpane-stop-auto-scrolling.html|
 		JScrollPane scrollable = new JScrollPane (testPanel);
 		scrollable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollable.setPreferredSize(new Dimension(FRAME_WIDTH - 20, FRAME_HEIGHT/2));
