@@ -12,6 +12,7 @@ public class TypingTest extends JFrame {
 	private final int FRAME_HEIGHT = 800, FRAME_WIDTH = 1350;
 	private JTextPane testPanel = new JTextPane();
 	private JTextPane textInputPanel = new JTextPane();
+	private int missed = 0;
 	
 	public TypingTest() {
 		KeyboardListener KL = new KeyboardListener();
@@ -64,8 +65,10 @@ public class TypingTest extends JFrame {
 			}
 			else if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)
 				textInputPanel.setEditable(false);
-			else
+			else {
+				missed++;
 				textInputPanel.setEditable(false);
+			}
 			
 		}
 
