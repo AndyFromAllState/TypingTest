@@ -108,20 +108,26 @@ public class TypingTest extends JFrame {
 		public void keyTyped(KeyEvent e) {
 			if (ended) return;
 			if (e.getKeyChar() == testPanel.getText().charAt(0)) {
+				
 				if (!running && !ended) {
 					running = true;
 					startTimer();
 				}
-				inputtedText += testPanel.getText().substring(0,1);
+				
+				inputtedText += testPanel.getText().substring(0, 1);
 				textInputPanel.setEditable(true);
 				testPanel.setText(testPanel.getText().substring(1));
+				
 			}
-			else if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)
+			else if(e.getKeyChar() == KeyEvent.VK_BACK_SPACE) {
 				textInputPanel.setEditable(false);
+				System.out.println("missed: " + missed);
+				
+			}
 			else {
-				missed++;
 				textInputPanel.setEditable(false);
-
+				missed++;
+				
 			}
 			
 
