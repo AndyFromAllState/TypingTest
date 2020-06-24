@@ -15,10 +15,12 @@ public class TypingTest extends JFrame {
 	private JTextPane textInputPanel = new JTextPane();
 	private String inputtedText = "";
 	private JLabel timerLabel = new JLabel("60s");
-	private JLabel wpmLabel = new JLabel("5wpm");
+	private JLabel wpmLabel = new JLabel("0wpm");
+	private JLabel accuracyLabel = new JLabel("Accuracy: ");
 	private boolean running = false, ended = false;
 	private double countdown = 60;
 	private double timeElapsed = 0;
+	private double missed = 0;
 	
 	public TypingTest() {
 		KeyboardListener KL = new KeyboardListener();
@@ -54,6 +56,7 @@ public class TypingTest extends JFrame {
 		
 		panel.add(wpmLabel);
 		panel.add(timerLabel);
+		panel.add(accuracyLabel);
 		panel.add(testPanel);
 		panel.add(textInputPanel);
 		this.setVisible(true);
@@ -74,7 +77,7 @@ public class TypingTest extends JFrame {
 					ended = true;
 					running = false;
 					timerLabel.setText("Time's Up");
-					wpmLabel.setText(calculateWPM() + "wpm");
+					wpmLabel.setText(String.format("%.1f wpm", calculateWPM()));
 					System.out.println("ended");
 					timer.cancel();
 				}
@@ -88,10 +91,15 @@ public class TypingTest extends JFrame {
 		timeElapsed += .1;
 		timerLabel.setText(String.format("%.1f s", countdown));
 		wpmLabel.setText(String.format("%.1f wpm", calculateWPM()));
+		accuracyLabel.setText(String.format("Accuracy: %.1f%%", calculateAccuracy()));
 	}
 
 	public double calculateWPM() {
 		return textInputPanel.getText().length() / 5 / (timeElapsed / 60);
+	}
+	
+	public double calculateAccuracy() {
+		return (textInputPanel.getText().length()/(textInputPanel.getText().length()+ missed)) * 100.0;
 	}
 	
 	private class KeyboardListener implements KeyListener {
@@ -110,9 +118,15 @@ public class TypingTest extends JFrame {
 			}
 			else if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)
 				textInputPanel.setEditable(false);
-			else
+			else {
+				missed++;
 				textInputPanel.setEditable(false);
+
+			}
+			
+
 			System.out.println(inputtedText);
+
 		}
 
 		@Override
