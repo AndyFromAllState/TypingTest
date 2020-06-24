@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.Timer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -12,6 +13,12 @@ public class TypingTest extends JFrame {
 	private final int FRAME_HEIGHT = 800, FRAME_WIDTH = 1350;
 	private JTextPane testPanel = new JTextPane();
 	private JTextPane textInputPanel = new JTextPane();
+	private String inputtedText = "";
+	private JLabel timerLabel = new JLabel("60s");
+	private JLabel wpmLabel = new JLabel("5wpm");
+	private boolean running = false, ended = false;
+	private double countdown = 60;
+	private double timeElapsed = 0;
 	
 	public TypingTest() {
 		KeyboardListener KL = new KeyboardListener();
@@ -45,6 +52,8 @@ public class TypingTest extends JFrame {
 		textInputPanel.setPreferredSize(new Dimension(FRAME_WIDTH - 20, FRAME_HEIGHT/2));
 		textInputPanel.addKeyListener(KL);
 		
+		panel.add(wpmLabel);
+		panel.add(timerLabel);
 		panel.add(testPanel);
 		panel.add(textInputPanel);
 		this.setVisible(true);
@@ -53,12 +62,49 @@ public class TypingTest extends JFrame {
 	public static void main(String[] args) {
 		new TypingTest();
 	}
+
+	public void startTimer() {
+		Timer timer = new Timer();
+		TimerTask tt = new TimerTask() {
+			public void run() {
+				if (running) {
+					countdown();
+				}
+				if (countdown <= 0) {
+					ended = true;
+					running = false;
+					timerLabel.setText("Time's Up");
+					wpmLabel.setText(calculateWPM() + "wpm");
+					System.out.println("ended");
+					timer.cancel();
+				}
+			}
+		};
+		timer.schedule(tt, 0, 100);
+	}
+	
+	public void countdown() {
+		countdown -= .1;
+		timeElapsed += .1;
+		timerLabel.setText(String.format("%.1f s", countdown));
+		wpmLabel.setText(String.format("%.1f wpm", calculateWPM()));
+	}
+
+	public double calculateWPM() {
+		return textInputPanel.getText().length() / 5 / (timeElapsed / 60);
+	}
 	
 	private class KeyboardListener implements KeyListener {
 
 		@Override
 		public void keyTyped(KeyEvent e) {
+			if (ended) return;
 			if (e.getKeyChar() == testPanel.getText().charAt(0)) {
+				if (!running && !ended) {
+					running = true;
+					startTimer();
+				}
+				inputtedText += testPanel.getText().substring(0,1);
 				textInputPanel.setEditable(true);
 				testPanel.setText(testPanel.getText().substring(1));
 			}
@@ -66,7 +112,7 @@ public class TypingTest extends JFrame {
 				textInputPanel.setEditable(false);
 			else
 				textInputPanel.setEditable(false);
-			
+			System.out.println(inputtedText);
 		}
 
 		@Override
