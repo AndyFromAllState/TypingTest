@@ -11,8 +11,6 @@ public class TestWords {
 		try {
 			File myFile = new File("shorterWordList.txt");
 			int lines = getNumberOfLines(myFile);
-			System.out.println(lines);
-			System.out.println("testing");
 			ArrayList<Integer> indexesUsed = new ArrayList<Integer>() ;
 			for (int x = 0; x < 250; x++) {
 				Scanner scan = new Scanner(myFile);
