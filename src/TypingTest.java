@@ -3,6 +3,7 @@ import java.util.Timer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.text.SimpleAttributeSet;
@@ -14,11 +15,11 @@ public class TypingTest extends JFrame {
 	private JTextPane testPanel = new JTextPane();
 	private JTextPane textInputPanel = new JTextPane();
 	private String inputtedText = "";
-	private JLabel timerLabel = new JLabel("60s");
+	private JLabel timerLabel = new JLabel("seconds");
 	private JLabel wpmLabel = new JLabel("0wpm");
 	private JLabel accuracyLabel = new JLabel("Accuracy: ");
 	private boolean running = false, ended = false;
-	private double countdown = 60;
+	private double countdown = 3;
 	private double timeElapsed = 0;
 	private double missed = 0;
 	
@@ -26,6 +27,8 @@ public class TypingTest extends JFrame {
 		KeyboardListener KL = new KeyboardListener();
 		
 		JPanel panel = new JPanel();
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation((dim.width/2-this.getSize().width/2)-FRAME_WIDTH/2, (dim.height/2-this.getSize().height/2)-FRAME_HEIGHT/2);
 		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("TypingTest");
@@ -78,12 +81,52 @@ public class TypingTest extends JFrame {
 					running = false;
 					timerLabel.setText("Time's Up");
 					wpmLabel.setText(String.format("%.1f wpm", calculateWPM()));
-					System.out.println("ended");
+					//System.out.println("ended");
 					timer.cancel();
+					ending();
 				}
 			}
 		};
 		timer.schedule(tt, 0, 100);
+	}
+	
+	public void ending() {
+		this.dispose();
+		new second();
+	}
+	
+	public class second extends JFrame {
+		private final int FRAME_HEIGHT2 = 350, FRAME_WIDTH2 = 700;
+		private JLabel wpmLabel = new JLabel(String.format("Words per minute: %.1f", calculateWPM()));
+		private JLabel accuracyLabel = new JLabel(String.format("Accuracy: %.1f%%", calculateAccuracy()));
+		private JLabel missLabel = new JLabel("Misses: " + missed);
+		
+		public second() {
+			
+			JPanel panel2 = new JPanel();
+			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+			this.setLocation((dim.width/2-this.getSize().width/2)-FRAME_WIDTH2/2, (dim.height/2-this.getSize().height/2)-FRAME_HEIGHT2/2);
+			this.setSize(FRAME_WIDTH2, FRAME_HEIGHT2);
+			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			this.setTitle("Results");
+			this.add(panel2);
+			
+			
+			panel2.setLayout(null);
+			panel2.add(wpmLabel);
+			panel2.add(accuracyLabel);
+			panel2.add(missLabel);
+			wpmLabel.setBounds(50, -200, 600, 500);
+			accuracyLabel.setBounds(50, -100, 500, 500);
+			missLabel.setBounds(50, 0, 500, 500);
+			
+			Font myFont = new Font("Serif", Font.BOLD, 50);
+			
+			wpmLabel.setFont(myFont);
+			accuracyLabel.setFont(myFont);
+			missLabel.setFont(myFont);
+			this.setVisible(true);
+		}
 	}
 	
 	public void countdown() {
