@@ -1,14 +1,12 @@
 import java.util.*;
 import java.util.Timer;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Toolkit;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+import java.awt.*; 
+
 
 public class TypingTest extends JFrame {
 	private final int FRAME_HEIGHT = 800, FRAME_WIDTH = 1350;
@@ -19,13 +17,18 @@ public class TypingTest extends JFrame {
 	private JLabel wpmLabel = new JLabel("0wpm");
 	private JLabel accuracyLabel = new JLabel("Accuracy: ");
 	private boolean running = false, ended = false;
-	private double countdown = 3;
+	private double countdown = 60;
 	private double timeElapsed = 0;
 	private double missed = 0;
 	
+	public void setCountdown(double count) {
+		
+		this.countdown = count;
+		
+	}
+	
 	public TypingTest() {
 		KeyboardListener KL = new KeyboardListener();
-		
 		JPanel panel = new JPanel();
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation((dim.width/2-this.getSize().width/2)-FRAME_WIDTH/2, (dim.height/2-this.getSize().height/2)-FRAME_HEIGHT/2);
@@ -63,8 +66,11 @@ public class TypingTest extends JFrame {
 		panel.add(testPanel);
 		panel.add(textInputPanel);
 		this.setVisible(true);
+		double num = Integer.parseInt(JOptionPane.showInputDialog("How many seconds would you like?"));
+		setCountdown(num);
 	}
 	
+
 	public static void main(String[] args) {
 		new TypingTest();
 	}
@@ -81,7 +87,6 @@ public class TypingTest extends JFrame {
 					running = false;
 					timerLabel.setText("Time's Up");
 					wpmLabel.setText(String.format("%.1f wpm", calculateWPM()));
-					//System.out.println("ended");
 					timer.cancel();
 					ending();
 				}
@@ -94,6 +99,7 @@ public class TypingTest extends JFrame {
 		this.dispose();
 		new second();
 	}
+	
 	
 	public class second extends JFrame {
 		private final int FRAME_HEIGHT2 = 350, FRAME_WIDTH2 = 700;
